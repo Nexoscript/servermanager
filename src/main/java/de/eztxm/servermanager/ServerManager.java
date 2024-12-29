@@ -7,20 +7,16 @@ import java.util.Scanner;
 public class ServerManager {
     private static final Map<String, MinecraftServer> servers = new HashMap<>();
     private static boolean running = true;
+    private static Scanner scanner;
 
     public static void main(String[] args) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\nProgramm wird beendet. Stoppe alle Server...");
             shutdownAllServers();
         }));
-
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         System.out.println("Multi-Server Manager gestartet. Verwenden Sie 'start', 'stop', 'console', oder 'exit'.");
         while (running) {
-            System.out.println(running);
-            System.out.println(scanner);
-            if (!scanner.hasNextLine())
-                break;
             String input = scanner.nextLine();
             String[] commandParts = input.split(" ", 4);
 
@@ -98,7 +94,7 @@ public class ServerManager {
             return;
         }
 
-        server.console();
+        server.console(scanner);
     }
 
     private static void shutdownAllServers() {

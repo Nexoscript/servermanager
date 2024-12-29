@@ -72,7 +72,7 @@ public class MinecraftServer {
         }
     }
 
-    public void console() {
+    public void console(Scanner scanner) {
         if (process == null || !process.isAlive()) {
             System.out.println("Server '" + name + "' läuft nicht.");
             return;
@@ -80,33 +80,35 @@ public class MinecraftServer {
 
         insideConsole = true;
 
-        try (Scanner scanner = new Scanner(System.in);
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))) {
-
-            synchronized (logBuffer) {
-                for (String log : logBuffer) {
-                    System.out.println("[" + name + "] " + log);
+        if (process != null && process.isAlive()) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))) {
+                synchronized (logBuffer) {
+                    for (String log : logBuffer) {
+                        System.out.println("[" + name + "] " + log);
+                    }
                 }
-            }
 
-            System.out.println("Konsole von Server '" + name + "' geöffnet. Tippen Sie 'leave', um zurückzukehren.");
+                System.out
+                        .println("Konsole von Server '" + name + "' geöffnet. Tippen Sie 'leave', um zurückzukehren.");
 
-            while (insideConsole) {
-                if (!scanner.hasNextLine())
-                    break;
-                String command = scanner.nextLine();
-                if (command.equalsIgnoreCase("leave")) {
-                    insideConsole = false;
-                    break;
+                while (insideConsole) {
+                    String command = scanner.nextLine();
+                    if (command.equalsIgnoreCase("leave")) {
+                        insideConsole = false;
+                        writer.close();
+                        break;
+                    }
+                    writer.write(command);
+                    writer.newLine();
+                    writer.flush();
                 }
-                writer.write(command);
-                writer.newLine();
-                writer.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                insideConsole = false;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            insideConsole = false;
+            return;
         }
+        insideConsole = false;
     }
 }
