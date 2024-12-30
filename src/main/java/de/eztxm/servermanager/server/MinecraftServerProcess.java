@@ -1,4 +1,4 @@
-package de.eztxm.servermanager;
+package de.eztxm.servermanager.server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,7 +11,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class MinecraftServer {
+import de.eztxm.servermanager.ServerManager;
+
+public class MinecraftServerProcess {
     private final String name;
     private final String path;
     private final String jar;
@@ -21,7 +23,7 @@ public class MinecraftServer {
     private final List<String> logBuffer = Collections.synchronizedList(new ArrayList<>());
     private BufferedWriter writer;
 
-    public MinecraftServer(String name, String path, String jar) {
+    public MinecraftServerProcess(String name, String path, String jar) {
         this.name = name;
         this.path = path;
         this.jar = jar;
@@ -47,6 +49,8 @@ public class MinecraftServer {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                ServerManager.getActionRunner().getServers().remove(name);
             }
         });
         outputThread.start();
@@ -78,9 +82,7 @@ public class MinecraftServer {
             System.out.println("Server '" + name + "' läuft nicht.");
             return;
         }
-
         insideConsole = true;
-
         if (process != null && process.isAlive()) {
             try {
                 writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
@@ -89,13 +91,13 @@ public class MinecraftServer {
                         System.out.println("[" + name + "] " + log);
                     }
                 }
-
                 System.out
                         .println("Konsole von Server '" + name + "' geöffnet. Tippen Sie 'leave', um zurückzukehren.");
 
                 while (insideConsole) {
                     String command = scanner.nextLine();
                     if (command.equalsIgnoreCase("leave")) {
+                        System.out.println("Konsole von Server '" + name + "' geschlossen.");
                         insideConsole = false;
                         break;
                     }

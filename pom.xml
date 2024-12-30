@@ -6,12 +6,12 @@
 
   <groupId>de.eztxm</groupId>
   <artifactId>servermanager</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>23</maven.compiler.source>
-    <maven.compiler.target>23</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
   </properties>
 
   <build>
@@ -43,4 +43,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>
