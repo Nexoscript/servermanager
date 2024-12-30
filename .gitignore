@@ -26,6 +26,10 @@ replay_pid*
 # vscode #
 .vscode/
 
+# intellij #
+.idea/
+*.iml
+
 # java #
 target/
 
