@@ -26,6 +26,9 @@ replay_pid*
 # vscode #
 .vscode/
 
+# java #
+target/
+
 # test #
 data/
 lobby/
