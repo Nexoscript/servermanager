@@ -19,6 +19,7 @@ public class MinecraftServer {
     private Thread outputThread;
     private volatile boolean insideConsole = false;
     private final List<String> logBuffer = Collections.synchronizedList(new ArrayList<>());
+    private BufferedWriter writer;
 
     public MinecraftServer(String name, String path, String jar) {
         this.name = name;
@@ -81,7 +82,8 @@ public class MinecraftServer {
         insideConsole = true;
 
         if (process != null && process.isAlive()) {
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))) {
+            try {
+                writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
                 synchronized (logBuffer) {
                     for (String log : logBuffer) {
                         System.out.println("[" + name + "] " + log);
@@ -95,7 +97,6 @@ public class MinecraftServer {
                     String command = scanner.nextLine();
                     if (command.equalsIgnoreCase("leave")) {
                         insideConsole = false;
-                        writer.close();
                         break;
                     }
                     writer.write(command);
