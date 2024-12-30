@@ -1,4 +1,4 @@
-package de.eztxm.servermanager.worker;
+package com.nexoscript.servermanager.worker;
 
 public class ServerManagerWorker {
 

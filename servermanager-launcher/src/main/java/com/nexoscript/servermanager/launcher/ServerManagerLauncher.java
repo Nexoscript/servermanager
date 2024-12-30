@@ -1,4 +1,4 @@
-package de.eztxm.servermanager.launcher;
+package com.nexoscript.servermanager.launcher;
 
 public class ServerManagerLauncher {
 

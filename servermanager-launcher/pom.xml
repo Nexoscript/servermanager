@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>de.eztxm</groupId>
+        <groupId>com.nexoscript</groupId>
         <artifactId>servermanager-parent</artifactId>
         <version>0.2.0</version>
     </parent>
@@ -25,7 +25,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>de.eztxm.servermanager.launcher.ServerManagerLauncher</mainClass>
+                            <mainClass>com.nexoscript.servermanager.launcher.ServerManagerLauncher</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Created-By>ezTxmMC &amp; DragonRex</Created-By>

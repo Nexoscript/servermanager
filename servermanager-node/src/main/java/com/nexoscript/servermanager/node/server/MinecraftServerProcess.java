@@ -1,4 +1,4 @@
-package de.eztxm.servermanager.node.server;
+package com.nexoscript.servermanager.node.server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import de.eztxm.servermanager.node.ServerManagerNode;
+import com.nexoscript.servermanager.node.ServerManagerNode;
 
 public class MinecraftServerProcess {
     private final String name;

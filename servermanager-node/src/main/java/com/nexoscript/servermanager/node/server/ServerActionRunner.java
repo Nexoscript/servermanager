@@ -1,4 +1,4 @@
-package de.eztxm.servermanager.node.server;
+package com.nexoscript.servermanager.node.server;
 
 import java.util.ArrayList;
 import java.util.HashMap;

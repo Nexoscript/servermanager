@@ -1,8 +1,8 @@
-package de.eztxm.servermanager.node.console;
+package com.nexoscript.servermanager.node.console;
 
 import java.util.Scanner;
 
-import de.eztxm.servermanager.node.server.ServerActionRunner;
+import com.nexoscript.servermanager.node.server.ServerActionRunner;
 
 public class Console {
     private final ServerActionRunner actionRunner;

@@ -1,7 +1,7 @@
-package de.eztxm.servermanager.node;
+package com.nexoscript.servermanager.node;
 
-import de.eztxm.servermanager.node.console.Console;
-import de.eztxm.servermanager.node.server.ServerActionRunner;
+import com.nexoscript.servermanager.node.console.Console;
+import com.nexoscript.servermanager.node.server.ServerActionRunner;
 
 public class ServerManagerNode {
     private static ServerActionRunner actionRunner;
