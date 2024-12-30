@@ -1,8 +1,8 @@
-package de.eztxm.servermanager.console;
+package de.eztxm.servermanager.node.console;
 
 import java.util.Scanner;
 
-import de.eztxm.servermanager.server.ServerActionRunner;
+import de.eztxm.servermanager.node.server.ServerActionRunner;
 
 public class Console {
     private final ServerActionRunner actionRunner;
@@ -46,14 +46,10 @@ public class Console {
                     }
                     this.actionRunner.openConsole(this.scanner, commandParts[1]);
                 }
-                case "exit" -> {
-                    this.actionRunner.shutdownAllServers();
-                    this.running = false;
-                }
+                case "exit" -> this.running = false;
                 default -> System.out.println("Unbekannter Befehl: " + command);
             }
         }
         this.scanner.close();
-        System.out.println("Programm beendet.");
     }
 }

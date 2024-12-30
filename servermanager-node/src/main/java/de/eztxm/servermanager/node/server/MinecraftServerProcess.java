@@ -1,4 +1,4 @@
-package de.eztxm.servermanager.server;
+package de.eztxm.servermanager.node.server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import de.eztxm.servermanager.ServerManager;
+import de.eztxm.servermanager.node.ServerManagerNode;
 
 public class MinecraftServerProcess {
     private final String name;
@@ -50,7 +50,8 @@ public class MinecraftServerProcess {
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                ServerManager.getActionRunner().getServers().remove(name);
+                ServerManagerNode.getActionRunner().getServers().remove(name);
+                insideConsole = false;
             }
         });
         outputThread.start();
@@ -67,7 +68,6 @@ public class MinecraftServerProcess {
             System.out.println("Server '" + name + "' wurde gestoppt");
             process.destroy();
         }
-
         try {
             if (outputThread != null) {
                 outputThread.join();
@@ -93,7 +93,6 @@ public class MinecraftServerProcess {
                 }
                 System.out
                         .println("Konsole von Server '" + name + "' geöffnet. Tippen Sie 'leave', um zurückzukehren.");
-
                 while (insideConsole) {
                     String command = scanner.nextLine();
                     if (command.equalsIgnoreCase("leave")) {

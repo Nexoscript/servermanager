@@ -1,5 +1,6 @@
-package de.eztxm.servermanager.server;
+package de.eztxm.servermanager.node.server;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -45,12 +46,11 @@ public class ServerActionRunner {
             System.out.println("Server '" + name + "' läuft nicht.");
             return;
         }
-
         server.console(scanner);
     }
 
     public void shutdownAllServers() {
-        for (MinecraftServerProcess server : servers.values()) {
+        for (MinecraftServerProcess server : new ArrayList<>(servers.values())) {
             server.stop();
         }
         servers.clear();
