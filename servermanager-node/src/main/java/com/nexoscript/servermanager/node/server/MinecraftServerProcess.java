@@ -1,5 +1,8 @@
 package com.nexoscript.servermanager.node.server;
 
+import com.nexoscript.servermanager.node.ServerManagerNode;
+import com.nexoscript.servermanger.api.server.IServer;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,9 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import com.nexoscript.servermanager.node.ServerManagerNode;
-
-public class MinecraftServerProcess {
+public class MinecraftServerProcess implements IServer {
+    private final ServerManagerNode node;
     private final String name;
     private final String path;
     private final String jar;
@@ -23,40 +25,45 @@ public class MinecraftServerProcess {
     private final List<String> logBuffer = Collections.synchronizedList(new ArrayList<>());
     private BufferedWriter writer;
 
-    public MinecraftServerProcess(String name, String path, String jar) {
+    public MinecraftServerProcess(ServerManagerNode node, String name, String path, String jar) {
+        this.node = node;
         this.name = name;
         this.path = path;
         this.jar = jar;
     }
 
-    public void start() throws IOException {
-        ProcessBuilder processBuilder = new ProcessBuilder(
-                "java", "-Xmx4G", "-Xms1G", "-Dcom.mojang.eula.agree=true", "-DIReallyKnowWhatIAmDoingISwear",
-                "-jar", jar, "nogui").directory(new File(path)).redirectErrorStream(true);
-
-        process = processBuilder.start();
-
-        outputThread = new Thread(() -> {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    synchronized (logBuffer) {
-                        logBuffer.add(line);
+    @Override
+    public void start() {
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(
+                    "java", "-Xmx4G", "-Xms1G", "-Dcom.mojang.eula.agree=true", "-DIReallyKnowWhatIAmDoingISwear",
+                    "-jar", jar, "nogui").directory(new File(path)).redirectErrorStream(true);
+            process = processBuilder.start();
+            outputThread = new Thread(() -> {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        synchronized (logBuffer) {
+                            logBuffer.add(line);
+                        }
+                        if (insideConsole) {
+                            System.out.println("[" + name + "] " + line);
+                        }
                     }
-                    if (insideConsole) {
-                        System.out.println("[" + name + "] " + line);
-                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    this.node.getActionRunner().getServers().remove(name);
+                    insideConsole = false;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                ServerManagerNode.getActionRunner().getServers().remove(name);
-                insideConsole = false;
-            }
-        });
-        outputThread.start();
+            });
+            outputThread.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    @Override
     public void stop() {
         if (process != null && process.isAlive()) {
             try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))) {
@@ -77,6 +84,7 @@ public class MinecraftServerProcess {
         }
     }
 
+    @Override
     public void console(Scanner scanner) {
         if (process == null || !process.isAlive()) {
             System.out.println("Server '" + name + "' läuft nicht.");

@@ -36,3 +36,7 @@ target/
 # test #
 data/
 lobby/
+templates/
+*.json
+*.toml
+*.db

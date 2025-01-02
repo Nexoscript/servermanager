@@ -9,9 +9,11 @@
         <version>0.2.0</version>
     </parent>
 
-    <artifactId>servermanager-node</artifactId>
+    <artifactId>servermanager-api</artifactId>
 
     <properties>
+        <maven.compiler.source>23</maven.compiler.source>
+        <maven.compiler.target>23</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -25,7 +27,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.nexoscript.servermanager.node.ServerManagerNode</mainClass>
+                            <mainClass>com.nexoscript.servermanager.launcher.ServerManagerLauncher</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Created-By>ezTxmMC &amp; DragonRex</Created-By>
@@ -44,18 +46,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.nexoscript</groupId>
-            <artifactId>servermanager-api</artifactId>
-            <version>0.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20241224</version>
-        </dependency>
-    </dependencies>
 
 </project>

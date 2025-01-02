@@ -1,15 +1,23 @@
 package com.nexoscript.servermanager.node.server;
 
+import com.nexoscript.servermanager.node.ServerManagerNode;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class ServerActionRunner {
+    private final ServerManagerNode node;
     private final Map<String, MinecraftServerProcess> servers;
 
-    public ServerActionRunner() {
+    public ServerActionRunner(ServerManagerNode node) {
+        this.node = node;
         this.servers = new HashMap<>();
+    }
+
+    public void createServer(String name, String templateName, String executePath) {
+
     }
 
     public void startServer(String name, String path, String jar) {
@@ -19,7 +27,7 @@ public class ServerActionRunner {
         }
 
         try {
-            MinecraftServerProcess server = new MinecraftServerProcess(name, path, jar);
+            MinecraftServerProcess server = new MinecraftServerProcess(node, name, path, jar);
             server.start();
             servers.put(name, server);
             System.out.println("Server '" + name + "' gestartet.");
