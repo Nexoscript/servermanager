@@ -35,7 +35,7 @@ target/
 
 # test #
 data/
-lobby/
+server*/
 templates/
 *.json
 *.toml

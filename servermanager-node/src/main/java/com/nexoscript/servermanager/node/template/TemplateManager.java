@@ -141,4 +141,8 @@ public class TemplateManager {
         }
         return null;
     }
+
+    public Map<String, Path> getTemplates() {
+        return templates;
+    }
 }

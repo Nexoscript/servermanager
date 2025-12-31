@@ -11,21 +11,16 @@ public class ServerManagerNode implements IServerManager {
 
     private final Console console;
 
-    public static void main(String[] args) {
-        new ServerManagerNode();
-    }
-
     public ServerManagerNode() {
         this.templateManager = new TemplateManager();
-        this.actionRunner = new ServerActionRunner(this);
-        this.shutdownHook();
+        this.actionRunner = new ServerActionRunner(this, this.templateManager);
         this.console = new Console(this.templateManager, this.actionRunner);
         this.console.start();
     }
 
     public void shutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("\nProgramm wird beendet. Stoppe alle Server...");
+            System.out.println("\nProgramm has been exited. Stop all servers...");
             this.actionRunner.shutdownAllServers();
         }));
     }
@@ -40,5 +35,10 @@ public class ServerManagerNode implements IServerManager {
 
     public TemplateManager getTemplateManager() {
         return templateManager;
+    }
+
+    public static void main(String[] args) {
+        ServerManagerNode node = new ServerManagerNode();
+        node.shutdownHook();
     }
 }

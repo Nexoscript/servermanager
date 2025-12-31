@@ -1,5 +1,6 @@
 package com.nexoscript.servermanager.node.console;
 
+import java.nio.file.Path;
 import java.util.Scanner;
 
 import com.nexoscript.servermanager.node.server.ServerActionRunner;
@@ -9,7 +10,6 @@ public class Console {
     private final TemplateManager templateManager;
     private final ServerActionRunner actionRunner;
     private final Scanner scanner;
-
     private boolean running;
 
     public Console(TemplateManager templateManager, ServerActionRunner actionRunner) {
@@ -20,58 +20,81 @@ public class Console {
     }
 
     public void start() {
-        System.out.println("Multi-Server Manager gestartet. Verwenden Sie 'start', 'stop', 'console', oder 'exit'.");
+        System.out.println("Server-Manager gestartet. Verwenden Sie 'start', 'stop', 'console', 'template', oder 'exit'.");
         while (this.running) {
             String input = this.scanner.nextLine();
             String[] commandParts = input.split(" ", 4);
-            if (commandParts.length < 1)
+            if (commandParts.length < 1) {
                 continue;
+            }
             String command = commandParts[0].toLowerCase();
             switch (command) {
+                case "create" -> {
+                    if (commandParts.length < 3 || commandParts[1].isBlank() || commandParts[2].isBlank()) {
+                        System.out.println("Verwendung: create <path> <template>");
+                        continue;
+                    }
+                    this.actionRunner.createServer(Path.of(commandParts[1]), commandParts[2]);
+                }
                 case "start" -> {
                     if (commandParts.length < 4) {
                         System.out.println("Verwendung: start <servername> <path> <jar>");
-                        break;
+                        continue;
                     }
                     this.actionRunner.startServer(commandParts[1], commandParts[2], commandParts[3]);
                 }
                 case "stop" -> {
                     if (commandParts.length < 2) {
                         System.out.println("Verwendung: stop <servername>");
-                        break;
+                        continue;
                     }
                     this.actionRunner.stopServer(commandParts[1]);
                 }
                 case "console" -> {
                     if (commandParts.length < 2) {
                         System.out.println("Verwendung: console <servername>");
-                        break;
+                        continue;
                     }
                     this.actionRunner.openConsole(this.scanner, commandParts[1]);
                 }
-                case "create-template" -> {
+                case "template" -> {
                     if (commandParts.length < 2) {
-                        System.out.println("Verwendung: create-template <name>");
-                        break;
+                        System.out.println("Verwendung: 'create', 'rename', 'delete' oder 'list'");
+                        continue;
                     }
-                    this.templateManager.createTemplate(commandParts[1]);
-                    System.out.println("Template " + commandParts[1] + " erstellt.");
-                }
-                case "rename-template" -> {
-                    if (commandParts.length < 3) {
-                        System.out.println("Verwendung: rename-template <name> <newName>");
-                        break;
+                    switch (commandParts[1].toLowerCase()) {
+                        case "create" -> {
+                            if (commandParts.length < 3 || commandParts[2].isBlank()) {
+                                System.out.println("Verwendung: template create <name>");
+                                continue;
+                            }
+                            this.templateManager.createTemplate(commandParts[2]);
+                            System.out.println("Template " + commandParts[2] + " erstellt.");
+                        }
+                        case "rename" -> {
+                            if (commandParts.length < 4 || commandParts[2].isBlank() || commandParts[3].isBlank()) {
+                                System.out.println("Verwendung: template rename <name> <newName>");
+                                continue;
+                            }
+                            this.templateManager.renameTemplate(commandParts[2], commandParts[3]);
+                            System.out.println("Template " + commandParts[2] + " zu " + commandParts[3] + " umbenannt.");
+                        }
+                        case "delete" -> {
+                            if (commandParts.length < 3 || commandParts[2].isBlank()) {
+                                System.out.println("Verwendung: template delete <name>");
+                                continue;
+                            }
+                            this.templateManager.deleteTemplate(commandParts[2]);
+                            System.out.println("Template " + commandParts[2] + " gelöscht.");
+                        }
+                        case "list" -> {
+                            if (this.templateManager.getTemplates().isEmpty()) {
+                                System.out.println("Keine Templates gefunden.");
+                                continue;
+                            }
+                            this.templateManager.getTemplates().forEach((name, path) -> System.out.printf("- %s -> %s%n", name, path.toString()));
+                        }
                     }
-                    this.templateManager.renameTemplate(commandParts[1], commandParts[2]);
-                    System.out.println("Template " + commandParts[1] + " zu " + commandParts[2] + " umbenannt.");
-                }
-                case "delete-template" -> {
-                    if (commandParts.length < 2) {
-                        System.out.println("Verwendung: delete-template <name>");
-                        break;
-                    }
-                    this.templateManager.deleteTemplate(commandParts[1]);
-                    System.out.println("Template " + commandParts[1] + " gelöscht.");
                 }
                 case "exit" -> this.running = false;
                 default -> System.out.println("Unbekannter Befehl: " + command);
