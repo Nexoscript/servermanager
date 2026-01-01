@@ -10,7 +10,6 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class TemplateManager {
     private final String templatesPath;
@@ -36,7 +35,7 @@ public class TemplateManager {
     }
 
     public void createTemplate(String name) {
-        if (this.getTemplate(name) != null) {
+        if (this.templatePath(name) != null) {
             System.out.println("Template " + name + " already exists");
             return;
         }
@@ -64,15 +63,15 @@ public class TemplateManager {
     }
 
     public void renameTemplate(String name, String newName) {
-        if (this.getTemplate(name) == null) {
+        if (this.templatePath(name) == null) {
             System.out.println("Template " + name + " does not exist");
             return;
         }
         try {
             this.createTemplate(newName);
-            System.out.println(this.getTemplate(name).toString());
-            System.out.println(this.getTemplate(newName).toString());
-            Files.move(this.getTemplate(name), this.getTemplate(newName), StandardCopyOption.ATOMIC_MOVE);
+            System.out.println(this.templatePath(name).toString());
+            System.out.println(this.templatePath(newName).toString());
+            Files.move(this.templatePath(name), this.templatePath(newName), StandardCopyOption.ATOMIC_MOVE);
             JSONArray templatesArray = (JSONArray) this.templatesConfig.get("templates");
             for (int i = 0; i < templatesArray.length(); i++) {
                 JSONObject object = templatesArray.getJSONObject(i);
@@ -95,11 +94,11 @@ public class TemplateManager {
 
     public void deleteTemplate(String name) {
         try {
-            if (this.getTemplate(name) == null) {
+            if (this.templatePath(name) == null) {
                 System.out.println("Template " + name + " does not exist");
                 return;
             }
-            Files.walkFileTree(this.getTemplate(name), new SimpleFileVisitor<>() {
+            Files.walkFileTree(this.templatePath(name), new SimpleFileVisitor<>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     Files.delete(file);
@@ -131,7 +130,7 @@ public class TemplateManager {
         }
     }
 
-    public Path getTemplate(String name) {
+    public Path templatePath(String name) {
         JSONArray templatesArray = (JSONArray) this.templatesConfig.get("templates");
         for (int i = 0; i < templatesArray.length(); i++) {
             JSONObject object = templatesArray.getJSONObject(i);
@@ -142,7 +141,7 @@ public class TemplateManager {
         return null;
     }
 
-    public Map<String, Path> getTemplates() {
+    public Map<String, Path> templates() {
         return templates;
     }
 }

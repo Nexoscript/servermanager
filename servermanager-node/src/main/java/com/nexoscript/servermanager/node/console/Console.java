@@ -88,11 +88,11 @@ public class Console {
                             System.out.println("Template " + commandParts[2] + " gelöscht.");
                         }
                         case "list" -> {
-                            if (this.templateManager.getTemplates().isEmpty()) {
+                            if (this.templateManager.templates().isEmpty()) {
                                 System.out.println("Keine Templates gefunden.");
                                 continue;
                             }
-                            this.templateManager.getTemplates().forEach((name, path) -> System.out.printf("- %s -> %s%n", name, path.toString()));
+                            this.templateManager.templates().forEach((name, path) -> System.out.printf("- %s -> %s%n", name, path.toString()));
                         }
                     }
                 }

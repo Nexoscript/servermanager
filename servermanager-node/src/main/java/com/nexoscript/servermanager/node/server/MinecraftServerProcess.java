@@ -53,7 +53,7 @@ public class MinecraftServerProcess implements IServer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    this.node.getActionRunner().getServers().remove(name);
+                    this.node.actionRunner().servers().remove(name);
                     insideConsole = false;
                 }
             });

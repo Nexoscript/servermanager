@@ -25,15 +25,15 @@ public class ServerManagerNode implements IServerManager {
         }));
     }
 
-    public Console getConsole() {
+    public Console console() {
         return this.console;
     }
 
-    public ServerActionRunner getActionRunner() {
+    public ServerActionRunner actionRunner() {
         return this.actionRunner;
     }
 
-    public TemplateManager getTemplateManager() {
+    public TemplateManager templateManager() {
         return templateManager;
     }
 

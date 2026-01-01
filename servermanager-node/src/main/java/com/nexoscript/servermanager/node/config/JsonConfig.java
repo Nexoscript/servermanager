@@ -77,7 +77,7 @@ public class JsonConfig {
     public void save() {
         File file = new File(this.configFile.toString());
         try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write(this.jsonObject.toString());
+            fileWriter.write(this.jsonObject.toString(4));
             fileWriter.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
