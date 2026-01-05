@@ -3,21 +3,26 @@ package com.nexoscript.servermanager.node;
 import com.nexoscript.servermanager.node.console.Console;
 import com.nexoscript.servermanager.node.server.ServerActionRunner;
 import com.nexoscript.servermanager.node.template.TemplateManager;
-import com.nexoscript.servermanger.api.IServerManager;
+import com.nexoscript.servermanger.api.IServerManagerNode;
+import com.nexoscript.servermanger.api.console.IConsole;
+import com.nexoscript.servermanger.api.server.IServerActionRunner;
+import com.nexoscript.servermanger.api.template.ITemplateManager;
 
-public class ServerManagerNode implements IServerManager {
-    private final TemplateManager templateManager;
-    private final ServerActionRunner actionRunner;
+public class ServerManagerNode implements IServerManagerNode {
+    private final ITemplateManager templateManager;
+    private final IServerActionRunner actionRunner;
 
-    private final Console console;
+    private final IConsole console;
 
     public ServerManagerNode() {
+        Provider.register(this);
         this.templateManager = new TemplateManager();
         this.actionRunner = new ServerActionRunner(this, this.templateManager);
         this.console = new Console(this.templateManager, this.actionRunner);
         this.console.start();
     }
 
+    @Override
     public void shutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\nProgramm has been exited. Stop all servers...");
@@ -25,15 +30,18 @@ public class ServerManagerNode implements IServerManager {
         }));
     }
 
-    public Console console() {
+    @Override
+    public IConsole console() {
         return this.console;
     }
 
-    public ServerActionRunner actionRunner() {
+    @Override
+    public IServerActionRunner actionRunner() {
         return this.actionRunner;
     }
 
-    public TemplateManager templateManager() {
+    @Override
+    public ITemplateManager templateManager() {
         return templateManager;
     }
 

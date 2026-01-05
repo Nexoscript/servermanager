@@ -1,7 +1,9 @@
 package com.nexoscript.servermanager.node.server;
 
-import com.nexoscript.servermanager.node.ServerManagerNode;
-import com.nexoscript.servermanager.node.template.TemplateManager;
+import com.nexoscript.servermanger.api.IServerManagerNode;
+import com.nexoscript.servermanger.api.server.IServer;
+import com.nexoscript.servermanger.api.server.IServerActionRunner;
+import com.nexoscript.servermanger.api.template.ITemplateManager;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,17 +11,18 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class ServerActionRunner {
-    private final ServerManagerNode node;
-    private final TemplateManager templateManager;
-    private final Map<String, MinecraftServerProcess> servers;
+public class ServerActionRunner implements IServerActionRunner {
+    private final IServerManagerNode node;
+    private final ITemplateManager templateManager;
+    private final Map<String, IServer> servers;
 
-    public ServerActionRunner(ServerManagerNode node, TemplateManager templateManager) {
+    public ServerActionRunner(IServerManagerNode node, ITemplateManager templateManager) {
         this.node = node;
         this.templateManager = templateManager;
         this.servers = new HashMap<>();
     }
 
+    @Override
     public void createServer(Path path, String templateName) {
             if (!path.toFile().mkdirs()) {
                 System.out.println("Konnte Pfad nicht erstellen.");
@@ -49,6 +52,7 @@ public class ServerActionRunner {
         }
     }
 
+    @Override
     public void startServer(String name, String path, String jar) {
         if (servers.containsKey(name)) {
             System.out.println("Server '" + name + "' läuft bereits.");
@@ -56,7 +60,7 @@ public class ServerActionRunner {
         }
 
         try {
-            MinecraftServerProcess server = new MinecraftServerProcess(node, name, path, jar);
+            IServer server = new Server(node, name, path, jar);
             server.start();
             servers.put(name, server);
             System.out.println("Server '" + name + "' gestartet.");
@@ -65,8 +69,9 @@ public class ServerActionRunner {
         }
     }
 
+    @Override
     public void stopServer(String name) {
-        MinecraftServerProcess server = servers.get(name);
+        IServer server = servers.get(name);
         if (server == null) {
             System.out.println("Server '" + name + "' läuft nicht.");
             return;
@@ -77,8 +82,9 @@ public class ServerActionRunner {
         System.out.println("Server '" + name + "' gestoppt.");
     }
 
+    @Override
     public void openConsole(Scanner scanner, String name) {
-        MinecraftServerProcess server = servers.get(name);
+        IServer server = servers.get(name);
         if (server == null) {
             System.out.println("Server '" + name + "' läuft nicht.");
             return;
@@ -86,15 +92,17 @@ public class ServerActionRunner {
         server.console(scanner);
     }
 
+    @Override
     public void shutdownAllServers() {
-        for (MinecraftServerProcess server : new ArrayList<>(servers.values())) {
+        for (IServer server : new ArrayList<>(servers.values())) {
             server.stop();
         }
         servers.clear();
         System.out.println("Alle Server gestoppt.");
     }
 
-    public Map<String, MinecraftServerProcess> servers() {
+    @Override
+    public Map<String, IServer> servers() {
         return servers;
     }
 }

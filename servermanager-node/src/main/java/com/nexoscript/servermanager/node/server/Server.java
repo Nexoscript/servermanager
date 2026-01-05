@@ -1,6 +1,7 @@
 package com.nexoscript.servermanager.node.server;
 
 import com.nexoscript.servermanager.node.ServerManagerNode;
+import com.nexoscript.servermanger.api.IServerManagerNode;
 import com.nexoscript.servermanger.api.server.IServer;
 
 import java.io.BufferedReader;
@@ -14,8 +15,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class MinecraftServerProcess implements IServer {
-    private final ServerManagerNode node;
+public class Server implements IServer {
+    private final IServerManagerNode node;
     private final String name;
     private final String path;
     private final String jar;
@@ -25,7 +26,7 @@ public class MinecraftServerProcess implements IServer {
     private final List<String> logBuffer = Collections.synchronizedList(new ArrayList<>());
     private BufferedWriter writer;
 
-    public MinecraftServerProcess(ServerManagerNode node, String name, String path, String jar) {
+    public Server(IServerManagerNode node, String name, String path, String jar) {
         this.node = node;
         this.name = name;
         this.path = path;

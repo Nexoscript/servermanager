@@ -3,22 +3,24 @@ package com.nexoscript.servermanager.node.console;
 import java.nio.file.Path;
 import java.util.Scanner;
 
-import com.nexoscript.servermanager.node.server.ServerActionRunner;
-import com.nexoscript.servermanager.node.template.TemplateManager;
+import com.nexoscript.servermanger.api.console.IConsole;
+import com.nexoscript.servermanger.api.server.IServerActionRunner;
+import com.nexoscript.servermanger.api.template.ITemplateManager;
 
-public class Console {
-    private final TemplateManager templateManager;
-    private final ServerActionRunner actionRunner;
+public class Console implements IConsole {
+    private final ITemplateManager templateManager;
+    private final IServerActionRunner actionRunner;
     private final Scanner scanner;
     private boolean running;
 
-    public Console(TemplateManager templateManager, ServerActionRunner actionRunner) {
+    public Console(ITemplateManager templateManager, IServerActionRunner actionRunner) {
         this.templateManager = templateManager;
         this.actionRunner = actionRunner;
         this.scanner = new Scanner(System.in);
         this.running = true;
     }
 
+    @Override
     public void start() {
         System.out.println("Server-Manager gestartet. Verwenden Sie 'start', 'stop', 'console', 'template', oder 'exit'.");
         while (this.running) {

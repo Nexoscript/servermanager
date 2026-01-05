@@ -1,6 +1,7 @@
 package com.nexoscript.servermanager.node.template;
 
 import com.nexoscript.servermanager.node.config.JsonConfig;
+import com.nexoscript.servermanger.api.template.ITemplateManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -11,7 +12,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TemplateManager {
+public class TemplateManager implements ITemplateManager {
     private final String templatesPath;
     private final JsonConfig templatesConfig;
     private final Map<String, Path> templates;
@@ -34,6 +35,7 @@ public class TemplateManager {
         }
     }
 
+    @Override
     public void createTemplate(String name) {
         if (this.templatePath(name) != null) {
             System.out.println("Template " + name + " already exists");
@@ -62,6 +64,7 @@ public class TemplateManager {
         System.out.println("Error creating template " + name);
     }
 
+    @Override
     public void renameTemplate(String name, String newName) {
         if (this.templatePath(name) == null) {
             System.out.println("Template " + name + " does not exist");
@@ -92,6 +95,7 @@ public class TemplateManager {
         }
     }
 
+    @Override
     public void deleteTemplate(String name) {
         try {
             if (this.templatePath(name) == null) {
@@ -130,6 +134,7 @@ public class TemplateManager {
         }
     }
 
+    @Override
     public Path templatePath(String name) {
         JSONArray templatesArray = (JSONArray) this.templatesConfig.get("templates");
         for (int i = 0; i < templatesArray.length(); i++) {
@@ -141,6 +146,7 @@ public class TemplateManager {
         return null;
     }
 
+    @Override
     public Map<String, Path> templates() {
         return templates;
     }
