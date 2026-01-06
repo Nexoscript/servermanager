@@ -1,7 +1,7 @@
 package com.nexoscript.servermanager.node.template;
 
 import com.nexoscript.servermanager.node.config.JsonConfig;
-import com.nexoscript.servermanger.api.template.ITemplateManager;
+import com.nexoscript.servermanager.api.template.ITemplateManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

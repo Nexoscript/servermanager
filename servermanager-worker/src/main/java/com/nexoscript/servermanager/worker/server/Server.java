@@ -1,8 +1,7 @@
-package com.nexoscript.servermanager.node.server;
+package com.nexoscript.servermanager.worker.server;
 
-import com.nexoscript.servermanager.node.ServerManagerNode;
-import com.nexoscript.servermanger.api.IServerManagerNode;
-import com.nexoscript.servermanger.api.server.IServer;
+import com.nexoscript.servermanager.api.server.IServer;
+import com.nexoscript.servermanager.api.server.IServerActionRunner;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Server implements IServer {
-    private final IServerManagerNode node;
+    private final IServerActionRunner actionRunner;
     private final String name;
     private final String path;
     private final String jar;
@@ -26,8 +25,8 @@ public class Server implements IServer {
     private final List<String> logBuffer = Collections.synchronizedList(new ArrayList<>());
     private BufferedWriter writer;
 
-    public Server(IServerManagerNode node, String name, String path, String jar) {
-        this.node = node;
+    public Server(IServerActionRunner actionRunner, String name, String path, String jar) {
+        this.actionRunner = actionRunner;
         this.name = name;
         this.path = path;
         this.jar = jar;
@@ -54,7 +53,7 @@ public class Server implements IServer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    this.node.actionRunner().servers().remove(name);
+                    this.actionRunner.servers().remove(name);
                     insideConsole = false;
                 }
             });

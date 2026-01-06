@@ -1,4 +1,4 @@
-package com.nexoscript.servermanger.api.server;
+package com.nexoscript.servermanager.api.server;
 
 import java.util.Scanner;
 

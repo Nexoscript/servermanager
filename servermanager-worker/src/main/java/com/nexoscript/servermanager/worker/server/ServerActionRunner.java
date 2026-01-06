@@ -1,9 +1,8 @@
-package com.nexoscript.servermanager.node.server;
+package com.nexoscript.servermanager.worker.server;
 
-import com.nexoscript.servermanger.api.IServerManagerNode;
-import com.nexoscript.servermanger.api.server.IServer;
-import com.nexoscript.servermanger.api.server.IServerActionRunner;
-import com.nexoscript.servermanger.api.template.ITemplateManager;
+import com.nexoscript.servermanager.api.server.IServer;
+import com.nexoscript.servermanager.api.server.IServerActionRunner;
+import com.nexoscript.servermanager.api.template.ITemplateManager;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,12 +11,10 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class ServerActionRunner implements IServerActionRunner {
-    private final IServerManagerNode node;
     private final ITemplateManager templateManager;
     private final Map<String, IServer> servers;
 
-    public ServerActionRunner(IServerManagerNode node, ITemplateManager templateManager) {
-        this.node = node;
+    public ServerActionRunner(ITemplateManager templateManager) {
         this.templateManager = templateManager;
         this.servers = new HashMap<>();
     }
@@ -60,7 +57,7 @@ public class ServerActionRunner implements IServerActionRunner {
         }
 
         try {
-            IServer server = new Server(node, name, path, jar);
+            IServer server = new Server(this, name, path, jar);
             server.start();
             servers.put(name, server);
             System.out.println("Server '" + name + "' gestartet.");

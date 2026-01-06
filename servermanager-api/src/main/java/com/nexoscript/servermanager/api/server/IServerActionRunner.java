@@ -1,4 +1,4 @@
-package com.nexoscript.servermanger.api.server;
+package com.nexoscript.servermanager.api.server;
 
 import java.nio.file.Path;
 import java.util.Map;

@@ -1,13 +1,12 @@
-package com.nexoscript.servermanger.api;
+package com.nexoscript.servermanager.api;
 
-import com.nexoscript.servermanger.api.console.IConsole;
-import com.nexoscript.servermanger.api.server.IServerActionRunner;
-import com.nexoscript.servermanger.api.template.ITemplateManager;
+import com.nexoscript.servermanager.api.console.IConsole;
+import com.nexoscript.servermanager.api.template.ITemplateManager;
 
 public interface IServerManagerNode {
     void shutdownHook();
     IConsole console();
-    IServerActionRunner actionRunner();
+    IServerManagerWorker interalWorker();
     ITemplateManager templateManager();
 
     class Provider {

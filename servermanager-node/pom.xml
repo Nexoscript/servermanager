@@ -52,6 +52,17 @@
             <version>0.2.0</version>
         </dependency>
         <dependency>
+            <groupId>com.nexoscript</groupId>
+            <artifactId>servermanager-worker</artifactId>
+            <version>0.2.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.nexoscript</groupId>
+                    <artifactId>servermanager-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20241224</version>

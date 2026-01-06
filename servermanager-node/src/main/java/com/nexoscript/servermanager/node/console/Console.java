@@ -3,9 +3,9 @@ package com.nexoscript.servermanager.node.console;
 import java.nio.file.Path;
 import java.util.Scanner;
 
-import com.nexoscript.servermanger.api.console.IConsole;
-import com.nexoscript.servermanger.api.server.IServerActionRunner;
-import com.nexoscript.servermanger.api.template.ITemplateManager;
+import com.nexoscript.servermanager.api.console.IConsole;
+import com.nexoscript.servermanager.api.server.IServerActionRunner;
+import com.nexoscript.servermanager.api.template.ITemplateManager;
 
 public class Console implements IConsole {
     private final ITemplateManager templateManager;
